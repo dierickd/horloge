@@ -1,0 +1,7 @@
+@function borderWidth($valueBase) {
+    @if ($valueBase / 10 < 20) {
+        @return 15px;
+    } @else {
+        @return $valueBase / 10 + px;
+    }
+}

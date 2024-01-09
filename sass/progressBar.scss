@@ -1,0 +1,147 @@
+@use "function" as fn;
+@import "regles";
+
+//VARIABLES
+$valueBase            : 500;
+$clock_size           : $valueBase;
+$clock_color          : #30507b;
+$hour_width           : 100px;
+$hour_index_width     : 2px;
+$hour_index_height    : -130px;
+$hour_pointer_width   : 4px;
+$minute_pointer_color : #e74011;
+$hour_pointer_color   : #5bc0c9;
+$square               : $valueBase + px;
+$borderWidth          : fn.borderWidth($valueBase);
+
+.progress-circle {
+    position         : relative; /* pour servir de référent */
+    box-sizing       : border-box; /* prise en compte bordure dans la dimension */
+    font-size        : 22px; /* pour définir les dimensions */
+    width            : $square; /* fixe la largeur */
+    height           : $square; /* fixe la hauteur */
+    border-radius    : 50%; /* rendu aspect circulaire */
+    border           : $borderWidth solid #CDE; /* couleur de fond de l'anneau */
+    background-color : #FFF; /* couleur de fond de la progress bar */
+}
+
+.progress-masque {
+    position : absolute;
+    width    : $square; /* 100% de la largeur */
+    height   : $square; /* 100% de la hauteur */
+    left     : calc($borderWidth * -1); /* décalage de la largeur bordure de la gauge */
+    top      : calc($borderWidth * -1); /* décalage de la largeur bordure de la gauge */
+    clip     : rect(0, $square, $square, calc($square / 2)); /* par défaut seule la partie droite est visible */
+}
+
+.progress-circle[data-value^='5']:not([data-value='5']):not([data-value^='5.']) .progress-masque,
+.progress-circle[data-value^='6']:not([data-value='6']):not([data-value^='6.']) .progress-masque,
+.progress-circle[data-value^='7']:not([data-value='7']):not([data-value^='7.']) .progress-masque,
+.progress-circle[data-value^='8']:not([data-value='8']):not([data-value^='8.']) .progress-masque,
+.progress-circle[data-value^='9']:not([data-value='9']):not([data-value^='9.']) .progress-masque,
+.progress-circle[data-value^='100'] .progress-masque {
+    clip : rect(auto, auto, auto, auto);
+}
+
+.progress-barre,
+.progress-sup {
+    position      : absolute;
+    box-sizing    : border-box; /* prise en compte bordure dans la dimension */
+    border-width  : $borderWidth; /* largeur bordure de la gauge */
+    border-style  : solid;
+    border-color  : #069;
+    border-radius : 50%; /* rendu aspect circulaire */
+    width         : $square; /* largeur à 100% */
+    height        : $square; /* hauteur à 100% */
+    clip          : rect(0, calc($square / 2), $square, 0); /* on ne garde que la partie gauche */
+}
+
+.progress-sup {
+    display : none;
+    clip    : rect(0, $square, $square, calc($square / 2));
+}
+
+.progress-circle[data-value^='5']:not([data-value='5']):not([data-value^='5.']) .progress-sup,
+.progress-circle[data-value^='6']:not([data-value='6']):not([data-value^='6.']) .progress-sup,
+.progress-circle[data-value^='7']:not([data-value='7']):not([data-value^='7.']) .progress-sup,
+.progress-circle[data-value^='8']:not([data-value='8']):not([data-value^='8.']) .progress-sup,
+.progress-circle[data-value^='9']:not([data-value='9']):not([data-value^='9.']) .progress-sup,
+.progress-circle[data-value^='100'] .progress-sup {
+    display : block;
+}
+
+@keyframes spin {
+    from {
+        transform : rotate(0deg);
+    }
+    to {
+        transform : rotate(360deg);
+    }
+}
+
+.hour {
+    position    : absolute;
+    top         : 0;
+    bottom      : 0;
+    width       : $hour_width;
+    margin-left : -$hour_width/2;
+    left        : 50%;
+
+    &:before {
+        content     : "";
+        position    : absolute;
+        left        : 50%;
+        top         : -60px;
+        width       : 1px;
+        height      : 30px;
+        margin-left : 0;
+        background  : rgba($clock_color, .5);
+    }
+
+    .time_number {
+        font-family : arial, serif;
+        text-align  : center;
+        color       : $clock_color;
+        font-size   : 25px;
+        margin-top  : $hour_index_height+20;
+    }
+
+    @for $i from 1 through 12 {
+        &:nth-child(#{$i}) {
+            transform : rotate(#{30*$i}deg);
+
+            .time_number {
+                transform : rotate(#{-30*$i}deg);
+            }
+        }
+    }
+}
+
+// PIE CHART
+.pie {
+    position         : absolute;
+    width            : 150px;
+    height           : 400px;
+    overflow         : hidden;
+    left             : 200px;
+    transform-origin : center center;
+
+    &::before {
+        content          : "";
+        position         : absolute;
+        width            : 100px;
+        height           : 400px;
+        left             : -100px;
+        border-radius    : 100px 0 0 100px;
+        transform-origin : right center;
+        background-color : blue;
+    }
+
+    &::after {
+        background-color : blue;
+    }
+
+    &[data-value="50"]::before {
+        transform : rotate(50deg);
+    }
+}
