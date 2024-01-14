@@ -1,10 +1,10 @@
 @use "function" as fn;
-@import "regles";
+//@import "regles";
 
 //VARIABLES
 $valueBase            : 500;
 $clock_size           : $valueBase;
-$clock_color          : #30507b;
+$clock_color          : #406287;
 $hour_width           : 100px;
 $hour_index_width     : 2px;
 $hour_index_height    : -130px;
@@ -87,31 +87,51 @@ $borderWidth          : fn.borderWidth($valueBase);
     margin-left : -$hour_width/2;
     left        : 50%;
 
+    &:nth-child(odd):before {
+        height     : 120px;
+        top        : -60px;
+        background : rgba($clock_color, .3);
+    }
+
     &:before {
         content     : "";
         position    : absolute;
         left        : 50%;
-        top         : -60px;
+        top         : -65px;
         width       : 1px;
-        height      : 30px;
+        height      : 130px;
         margin-left : 0;
-        background  : rgba($clock_color, .5);
+        background  : rgba(darkblue, .5);
     }
 
     .time_number {
         font-family : arial, serif;
         text-align  : center;
         color       : $clock_color;
-        font-size   : 25px;
+        font-size   : 20px;
         margin-top  : $hour_index_height+20;
     }
 
-    @for $i from 1 through 12 {
-        &:nth-child(#{$i}) {
-            transform : rotate(#{30*$i}deg);
+    &.type-hour-24 {
+        @for $i from 1 through 48 {
+            &:nth-child(#{$i}) {
+                transform : rotate(#{7.5*$i}deg);
 
-            .time_number {
-                transform : rotate(#{-30*$i}deg);
+                .time_number {
+                    transform : rotate(#{-7.5*$i}deg);
+                }
+            }
+        }
+    }
+
+    &.type-hour-12 {
+        @for $i from 1 through 24 {
+            &:nth-child(#{$i}) {
+                transform : rotate(#{15*$i}deg);
+
+                .time_number {
+                    transform : rotate(#{-15*$i}deg);
+                }
             }
         }
     }
@@ -141,7 +161,7 @@ $borderWidth          : fn.borderWidth($valueBase);
         background-color : blue;
     }
 
-    &[data-value="50"]::before {
-        transform : rotate(50deg);
-    }
+    //&[data-value="50"]::before {
+    //    transform : rotate(50deg);
+    //}
 }

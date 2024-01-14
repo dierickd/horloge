@@ -1,6 +1,9 @@
 @import "sass/progressBar";
 @import "sass/pie";
+@import "sass/canvas";
+@import "sass/regles";
 
 .container {
-    margin : 100px;
+    margin   : 100px;
+    position : relative;
 }
